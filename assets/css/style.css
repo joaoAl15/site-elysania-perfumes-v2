@@ -488,3 +488,7 @@ input, textarea, select { font: inherit; color: inherit; }
 }
 
 @media (max-width: 959px) { .hero__lead { font-size: 15px; margin-bottom: 20px; } .hero .eyebrow { margin-bottom: 10px; } .note { font-size: 15px; } }
+/* Tablet: mantém a proporção dos arcos do topo */
+@media (min-width: 560px) and (max-width: 959px) {
+  .hero__art { width: min(100%, 460px); max-height: 460px; height: 50svh; justify-self: center; }
+}
