@@ -15,9 +15,28 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/style.css?v=2">
+  <link rel="stylesheet" href="assets/css/style.css?v=4">
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="igGrad" cx="28%" cy="108%" r="140%">
+        <stop offset="0" stop-color="#fdf497"/><stop offset=".08" stop-color="#fdf497"/>
+        <stop offset=".45" stop-color="#fd5949"/><stop offset=".62" stop-color="#d6249f"/>
+        <stop offset=".95" stop-color="#285aeb"/>
+      </radialGradient>
+      <linearGradient id="igSide" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8326a"/><stop offset="1" stop-color="#4a2f9e"/></linearGradient>
+      <linearGradient id="igGloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".75"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    </defs>
+    <symbol id="ig3d" viewBox="0 0 64 70">
+      <rect x="4" y="10" width="56" height="56" rx="17" fill="url(#igSide)"/>
+      <rect x="4" y="4" width="56" height="56" rx="17" fill="url(#igGrad)"/>
+      <rect x="9" y="7" width="46" height="22" rx="11" fill="url(#igGloss)" opacity=".5"/>
+      <rect x="17" y="17" width="30" height="30" rx="9.5" fill="none" stroke="#fff" stroke-width="4"/>
+      <circle cx="32" cy="32" r="7.4" fill="none" stroke="#fff" stroke-width="4"/>
+      <circle cx="41.6" cy="22.4" r="2.5" fill="#fff"/>
+    </symbol>
+  </svg>
 
   <!-- Abertura -->
   <div class="curtain" id="curtain" aria-hidden="true">
@@ -34,6 +53,7 @@
       <a href="#vitrine" class="top__link top__desk">Vitrine</a>
       <a href="#escolhas" class="top__link top__desk">Escolhas</a>
       <a href="#como-comprar" class="top__link top__desk">Como comprar</a>
+      <a class="top__ig" data-ig-link href="#" target="_blank" rel="noopener" aria-label="Instagram @elysanyaperfumaria"><svg class="ig3d" viewBox="0 0 64 70" aria-hidden="true"><use href="#ig3d"/></svg></a>
       <button class="top__bag" data-open-bag aria-label="Abrir sacola">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
         <span class="top__badge" data-bag-num>0</span>
@@ -54,7 +74,7 @@
       </ul>
       <div class="menu__foot">
         <a data-wa-link href="#" target="_blank" rel="noopener" class="pill pill--rose">WhatsApp</a>
-        <a data-ig-link href="#" target="_blank" rel="noopener" class="pill pill--line">Instagram</a>
+        <a data-ig-link href="#" target="_blank" rel="noopener" class="pill pill--line pill--ig"><svg class="ig3d" viewBox="0 0 64 70" aria-hidden="true"><use href="#ig3d"/></svg>@elysanyaperfumaria</a>
       </div>
     </div>
   </div>
@@ -155,8 +175,15 @@
 
     <!-- Sobre -->
     <section class="section about" id="sobre" aria-label="Sobre">
-      <div class="about__seal reveal">
-        <img src="assets/logo/selo-512.png" alt="Selo Elysanya Perfumaria" width="512" height="512" loading="lazy">
+      <div class="seal3d reveal" id="seal3d">
+        <div class="seal3d__stage">
+          <div class="seal3d__coin" id="coin">
+            <img class="seal3d__face" src="assets/logo/selo-512.png" alt="Selo Elysanya Perfumaria" width="512" height="512" loading="lazy" draggable="false">
+          </div>
+          <div class="seal3d__shadow" aria-hidden="true"></div>
+        </div>
+        <div class="seal3d__minis" id="minis" aria-hidden="true"></div>
+        <p class="seal3d__hint">Toque nos perfuminhos ✦</p>
       </div>
       <div class="about__text">
         <p class="eyebrow">Quem escolhe com você</p>
@@ -168,6 +195,19 @@
           <li><span>Pedidos</span>Pelo WhatsApp</li>
         </ul>
       </div>
+    </section>
+
+    <!-- Instagram -->
+    <section class="insta" id="instagram" aria-label="Instagram">
+      <a class="insta__card" data-ig-link href="#" target="_blank" rel="noopener">
+        <span class="insta__icon" id="igTilt"><svg class="ig3d ig3d--xl" viewBox="0 0 64 70" aria-hidden="true"><use href="#ig3d"/></svg></span>
+        <span class="insta__text">
+          <span class="eyebrow">Siga no Instagram</span>
+          <span class="insta__handle">@elysanyaperfumaria</span>
+          <span class="insta__lead">Lançamentos, kits e promoções aparecem primeiro por lá.</span>
+          <span class="pill pill--insta pill--lg">Seguir no Instagram <span aria-hidden="true">→</span></span>
+        </span>
+      </a>
     </section>
 
     <!-- Contato -->
@@ -245,13 +285,16 @@
     <button class="pill pill--rose" id="fbGo">Finalizar <span aria-hidden="true">→</span></button>
   </div>
 
-  <a class="wa-fab" id="waFab" data-wa-link href="#" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
+  <a class="ig-fab is-top" id="igFab" data-ig-link href="#" target="_blank" rel="noopener" aria-label="Instagram @elysanyaperfumaria"><svg class="ig3d" viewBox="0 0 64 70" aria-hidden="true"><use href="#ig3d"/></svg></a>
+
+  <a class="wa-fab is-top" id="waFab" data-wa-link href="#" target="_blank" rel="noopener" aria-label="Falar no WhatsApp">
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.610-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.08c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2.01-1.41.25-.7.25-1.29.17-1.41-.07-.13-.27-.2-.57-.35M12.05 21.5h-.01a9.43 9.43 0 0 1-4.8-1.32l-.35-.2-3.56.93.95-3.47-.22-.36a9.4 9.4 0 0 1-1.44-5.01c0-5.2 4.23-9.43 9.44-9.43 2.52 0 4.89.98 6.67 2.77a9.37 9.37 0 0 1 2.76 6.67c0 5.2-4.24 9.43-9.44 9.43m8.03-17.46A11.27 11.27 0 0 0 12.05.72C5.79.72.7 5.8.7 12.06c0 2 .52 3.950 1.52 5.67L.6 23.6l6.02-1.58a11.3 11.3 0 0 0 5.42 1.38h.01c6.25 0 11.34-5.09 11.35-11.34 0-3.03-1.18-5.88-3.32-8.02"/></svg>
   </a>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="assets/js/config.js?v=1"></script>
-  <script src="assets/js/app.js?v=1"></script>
+  <script src="assets/js/app.js?v=2"></script>
+  <script src="assets/js/fx.js?v=2"></script>
 </body>
 </html>
