@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel · Elysanya</title>
+  <link rel="icon" href="assets/logo/selo-64.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/logo/selo-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/admin-base.css?v=1">
+  <link rel="stylesheet" href="assets/css/admin.css?v=1">
+</head>
+<body class="adm">
+
+  <header class="adm-top">
+    <span class="adm-top__brand"><img src="assets/logo/selo-64.png" alt="" width="32" height="32">Elysanya <span class="mono label">/ painel</span></span>
+    <nav class="adm-top__nav">
+      <a href="index.html" target="_blank" rel="noopener" class="mono">Ver site ↗</a>
+      <button class="mono" id="logout" hidden>Sair</button>
+    </nav>
+  </header>
+
+  <!-- Login -->
+  <section class="adm-login" id="loginView">
+    <span class="mono label">[ Acesso ]</span>
+    <h1 class="display adm-h1">Painel de<br>produtos</h1>
+    <p class="adm-lead">Aqui você adiciona, edita e remove produtos da vitrine. As alterações aparecem no site em cerca de 1 minuto.</p>
+
+    <form id="loginForm" class="adm-form" autocomplete="off">
+      <div class="adm-row">
+        <label class="field"><span class="mono label">Usuário GitHub</span><input id="ghOwner" required></label>
+        <label class="field"><span class="mono label">Repositório</span><input id="ghRepo" required></label>
+      </div>
+      <div class="adm-row">
+        <label class="field"><span class="mono label">Branch</span><input id="ghBranch" value="main" required></label>
+        <label class="field"><span class="mono label">Chave de acesso (token)</span><input id="ghToken" type="password" required autocomplete="off"></label>
+      </div>
+      <label class="adm-check"><input type="checkbox" id="remember" checked> Lembrar neste aparelho</label>
+      <button class="btn" type="submit">Entrar <span>→</span></button>
+      <p class="fine" id="loginError" role="alert"></p>
+    </form>
+
+    <details class="adm-help">
+      <summary class="mono">Como conseguir a chave de acesso?</summary>
+      <ol>
+        <li>Entre no GitHub com a conta onde o site está publicado.</li>
+        <li>Abra <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong> e clique em <strong>Generate new token</strong>.</li>
+        <li>Em <strong>Repository access</strong>, escolha <em>Only select repositories</em> e selecione apenas o repositório do site.</li>
+        <li>Em <strong>Permissions → Repository permissions → Contents</strong>, marque <strong>Read and write</strong>.</li>
+        <li>Gere a chave, copie e cole no campo acima. Guarde em lugar seguro e não compartilhe.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- Lista -->
+  <section class="adm-main" id="listView" hidden>
+    <div class="adm-head">
+      <div>
+        <span class="mono label" id="repoLabel"></span>
+        <h1 class="display adm-h1">Produtos <span class="adm-count" id="admCount"></span></h1>
+      </div>
+      <button class="btn adm-new" id="newBtn">Novo produto <span>+</span></button>
+    </div>
+
+    <div class="adm-tools">
+      <label class="search"><span class="sr-only">Buscar</span><input type="search" id="admSearch" placeholder="Buscar produto…"></label>
+      <select id="admCat" class="adm-select" aria-label="Filtrar categoria"></select>
+    </div>
+
+    <ul class="adm-list" id="admList"></ul>
+
+    <details class="adm-cats">
+      <summary class="display">Categorias</summary>
+      <p class="fine">A ordem aqui é a ordem dos filtros no site. Categorias sem produtos não aparecem no site.</p>
+      <ul id="catList" class="adm-catlist"></ul>
+      <form id="catForm" class="adm-row adm-row--inline">
+        <label class="field"><span class="mono label">Nova categoria</span><input id="catName" required></label>
+        <button class="btn btn--ghost" type="submit">Adicionar</button>
+      </form>
+    </details>
+
+    <div class="adm-foot">
+      <button class="mono" id="exportBtn">Baixar backup (.json)</button>
+      <button class="mono" id="reloadBtn">Recarregar do GitHub</button>
+    </div>
+  </section>
+
+  <!-- Editor -->
+  <div class="overlay" id="overlay"></div>
+  <aside class="sheet sheet--product" id="editor" role="dialog" aria-modal="true" aria-label="Editar produto">
+    <div class="sheet__bar">
+      <span class="mono label" id="edTitle">Novo produto</span>
+      <button class="sheet__close" data-close type="button">Fechar ✕</button>
+    </div>
+    <form class="sheet__scroll adm-editor" id="edForm" autocomplete="off">
+      <div class="adm-photo">
+        <div class="adm-photo__frame"><img id="edPreview" alt="" hidden><span id="edNoPhoto" class="mono label">Sem foto</span></div>
+        <div class="adm-photo__ctrl">
+          <label class="btn btn--ghost adm-file">Escolher foto <span>↑</span><input type="file" id="edFile" accept="image/*"></label>
+          <div class="adm-fit" role="radiogroup" aria-label="Ajuste da foto">
+            <label><input type="radio" name="fit" value="contain" checked> Inteira (fundo branco)</label>
+            <label><input type="radio" name="fit" value="cover"> Preencher (corta bordas)</label>
+          </div>
+          <p class="fine">Dica: fotos com fundo branco ficam mais bonitas na vitrine. A imagem é ajustada automaticamente para 1000×1250.</p>
+        </div>
+      </div>
+
+      <div class="adm-fields">
+        <label class="field"><span class="mono label">Nome do produto *</span><input id="edNome" required maxlength="120"></label>
+        <div class="adm-row">
+          <label class="field"><span class="mono label">Marca</span><input id="edMarca" list="marcas" maxlength="40"></label>
+          <label class="field"><span class="mono label">Categoria *</span><select id="edCategoria" class="adm-select" required></select></label>
+        </div>
+        <div class="adm-row">
+          <label class="field"><span class="mono label">Preço (R$) — 0 = "Consulte"</span><input id="edPreco" inputmode="decimal" placeholder="100,00"></label>
+          <label class="field"><span class="mono label">Tamanho / volume</span><input id="edVolume" placeholder="100 ml" maxlength="60"></label>
+        </div>
+        <label class="field"><span class="mono label">Família / característica</span><input id="edFamilia" placeholder="Amadeirado, Floral, Matte…" maxlength="60"></label>
+        <label class="field"><span class="mono label">Descrição</span><textarea id="edDescricao" rows="6" maxlength="1200"></textarea></label>
+        <div class="adm-switches">
+          <label class="adm-check"><input type="checkbox" id="edDisponivel" checked> Disponível (desmarque = "Esgotado")</label>
+          <label class="adm-check"><input type="checkbox" id="edDestaque"> Mostrar em "Os mais pedidos"</label>
+        </div>
+      </div>
+      <datalist id="marcas"></datalist>
+
+      <div class="adm-editor__actions">
+        <button class="btn" type="submit" id="edSave">Salvar e publicar <span>→</span></button>
+        <button class="btn btn--ghost" type="button" id="edDelete" hidden>Excluir produto <span>✕</span></button>
+      </div>
+    </form>
+  </aside>
+
+  <div class="adm-busy" id="busy" hidden><div><div class="loader__count" style="font-size:64px">···</div><p class="mono" id="busyMsg">Publicando…</p></div></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="assets/js/config.js?v=1"></script>
+  <script src="assets/js/admin.js?v=1"></script>
+</body>
+</html>
