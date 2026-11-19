@@ -2,7 +2,7 @@
 
 Segunda versão visual (creme, blush, cacau e rosé da logo; serifada Cormorant + Manrope; molduras em arco).
 Mesmo catálogo, painel e pedido pelo WhatsApp da v1 (github.com/joaoAl15/site-elysania-perfumes-v1).
-O painel `admin.html` usa `assets/css/admin-base.css` (visual da v1).
+O painel `admin.html` usa o mesmo visual do site (`style.css` + `admin.css`). A chave fica salva por repositório, então v1 e v2 não se misturam.
 
 Vitrine estática (HTML/CSS/JS puro) para GitHub Pages. Pedidos são finalizados no WhatsApp.
 Site feito por Tokanu.

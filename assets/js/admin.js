@@ -9,7 +9,8 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const DATA_PATH = "data/produtos.json";
   const IMG_DIR = "assets/produtos";
-  const LS_KEY = "ely_admin";
+  // Chave salva por repositório (v1 e v2 ficam no mesmo domínio e não podem se misturar)
+  const LS_KEY = `ely_admin_${(CFG.github && CFG.github.repo) || "site"}`;
 
   const st = {
     gh: null,          // { owner, repo, branch, token }
@@ -162,10 +163,12 @@
       $("#loginView").hidden = true;
       $("#listView").hidden = false;
       $("#logout").hidden = false;
-      $("#repoLabel").textContent = `[ ${cred.owner}/${cred.repo} · ${cred.branch} ]`;
+      $("#repoLabel").textContent = `Conectado a ${cred.owner}/${cred.repo}`;
       render();
     } catch (e) {
       $("#loginError").textContent = e.message;
+      if (e.status === 404) $(".adm-advanced").open = true;
+      if (e.status === 401) { try { localStorage.removeItem(LS_KEY); } catch {} }
     } finally {
       busy(false);
     }
@@ -185,7 +188,11 @@
     const list = produtos
       .map((p, i) => ({ p, i }))
       .filter(({ p }) => (!cur || p.categoria === cur) && (!q || `${p.nome} ${p.marca}`.toLowerCase().includes(q)));
-    $("#admCount").textContent = `(${produtos.length})`;
+    const off = produtos.filter((p) => p.disponivel === false).length;
+    $("#admStats").innerHTML = `
+      <li><strong>${produtos.length}</strong><span>Produtos</span></li>
+      <li><strong>${off}</strong><span>Esgotados</span></li>
+      <li><strong>${produtos.filter((p) => p.destaque).length}</strong><span>Escolhas</span></li>`;
     const base = location.href.replace(/admin\.html.*$/, "");
     $("#admList").innerHTML = list.length
       ? list.map(({ p, i }) => `
@@ -196,7 +203,7 @@
             <div class="adm-item__meta mono">${esc(p.marca || "—")} · ${esc(p.categoria)} · ${brl(p.preco)}</div>
             <div class="adm-item__flags">
               <button class="adm-flag${p.disponivel !== false ? " is-on" : ""}" data-toggle="disponivel" data-i="${i}">${p.disponivel !== false ? "Disponível" : "Esgotado"}</button>
-              <button class="adm-flag${p.destaque ? " is-on" : ""}" data-toggle="destaque" data-i="${i}">Destaque</button>
+              <button class="adm-flag${p.destaque ? " is-on" : ""}" data-toggle="destaque" data-i="${i}">★ Escolha</button>
             </div>
           </div>
           <div class="adm-item__actions">
